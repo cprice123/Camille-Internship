@@ -22,7 +22,7 @@ y <- mtcars$mpg
 fit <- randomForest(x = x, y = y)
 
 edges <- fit$importance
-edges <- edges[order(edges, decreasing=TRUE),]
+edges <- edges[order(edges, decreasing=TRUE),]#ordered importance
 
 #my try (based on example)
 #------------------------------------------------------------------------------
