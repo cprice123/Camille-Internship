@@ -50,11 +50,11 @@ plot.importance <- xgb.plot.importance(importance_matrix = importance)
 #best and ones taken out (cyl, disp, wt, vs, am, gear)
 #------------------------------------------------------------------------------
 mtcarsm <- as.matrix(mtcars[,-1])
-bst <- xgboost(data = mtcarsm, label = mtcars$mpg, eta= .5, nrounds = 70)
+bst <- xgboost(data = mtcarsm, label = mtcars$mpg, eta = 0.1, nrounds = 100)
 
 importance <- xgb.importance(feature_names = colnames(mtcarsm), model = bst)
 plot.importance <- xgb.plot.importance(importance_matrix = importance)
-#different nrounds
+#different nrounds and eta
 #------------------------------------------------------------------------------
 
 
