@@ -1,3 +1,5 @@
+library(xgboost)
+#------------------------------------------------------------------------------
 # Load matrix and transform via arcsinh
 load(system.file(package="trena", "extdata/ampAD.154genes.mef2cTFs.278samples.RData"))
 
