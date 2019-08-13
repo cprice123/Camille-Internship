@@ -145,7 +145,7 @@ setMethod("run", "XGBoostSolver",
             
             # Fashingf a dat.frame wtih the selected features with approrpiate scores
             tbl <- data.frame(row.names = importance$Feature,
-                              "importance" = importance[,-1])
+                              importance[,-1])
             
             return(tbl)
           })
