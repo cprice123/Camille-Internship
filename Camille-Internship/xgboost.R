@@ -56,6 +56,14 @@ importance <- xgb.importance(feature_names = colnames(mtcarsm), model = bst)
 plot.importance <- xgb.plot.importance(importance_matrix = importance)
 #different nrounds and eta
 #------------------------------------------------------------------------------
+load(system.file(package="trena", "extdata/ampAD.154genes.mef2cTFs.278samples.RData"))
+target.gene <- mtx.sub["MEF2C",]
+Regulators <- setdiff(rownames(mtx.sub), "MEF2C")
+bst <- xgboost(data = t(mtx.sub[Regulators,]), label = target.gene, eta = 0.1, nrounds = 150)
 
+importance <- xgb.importance(feature_names = Regulators, model = bst)
+plot.importance <- xgb.plot.importance(importance_matrix = importance)
+#xgboost with spearman test data
+#------------------------------------------------------------------------------
 
 
