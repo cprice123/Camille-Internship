@@ -43,10 +43,10 @@ test_ampAD.mef2c.154tfs.278samples.XGBoost <- function()
   
     XGBoost.solver <- XGBoostSolver(mtx.asinh, target.gene, tfs) #decomment
     tbl <- run(XGBoost.solver) #decomment
-  
+
   # Check for empirical values
-   # checkTrue(nrow(subset(tbl, abs(coefficient) > 0.8)) == 9)
-  
+    checkTrue(nrow(subset(tbl, abs(Importance) > 0.008)) == 10)
+
 } # test_ampAD.mef2c.154tfs.278samples.XGBoost
 #----------------------------------------------------------------------------------------------------
 if(!interactive()) runTests()
