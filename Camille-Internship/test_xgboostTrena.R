@@ -45,8 +45,8 @@ test_ampAD.mef2c.154tfs.278samples.XGBoost <- function()
     tbl <- run(XGBoost.solver) #decomment
 
   # Check for empirical values
-    checkTrue(nrow(subset(tbl, abs(Importance) > 0.008)) == 10)
-
+    checkTrue(nrow(subset(tbl, abs(Importance) > 0.013)) == 9)#decomment, edit numbers
+    
 } # test_ampAD.mef2c.154tfs.278samples.XGBoost
 #----------------------------------------------------------------------------------------------------
 if(!interactive()) runTests()
