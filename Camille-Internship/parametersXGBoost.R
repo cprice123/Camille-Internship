@@ -139,11 +139,11 @@ setMethod("run", "ParamXGBoostSolver",
             y = as.vector(t(mtx[target.gene,])) # Make target gene levels into a vector
             
             #ParamXGBoostSolver
-            tbl_logloss <- data.frame("Rounds" = numeric(),
+            tbl_eval <- data.frame("Rounds" = numeric(),
                                       "Depth" = numeric(),
                                       "r_sample" = numeric(),
                                       "c_sample" = numeric(),
-                                      "minLogLoss" = numeric(),
+                                      #"Eval" = numeric(),
                                       "best_round" = numeric())
             
             for (rounds in seq(100, 1000, 50)){
@@ -163,17 +163,18 @@ setMethod("run", "ParamXGBoostSolver",
                                     subsample = r_sample, 
                                     colsample_bytree = c_sample,
                                     early_stopping_rounds = 0.5*rounds,
-                                    eval_metric = 'logloss',
+                                    #objective = regression_type,
                                     verbose = FALSE)
-                    print(as.matrix(cv))
+                    #print(as.matrix(cv))
                     print(cv)
-                    print(paste(rounds, depth, r_sample, c_sample, min(as.matrix(cv)[,3])))
-                    tbl_logloss[nrow(tbl_logloss)+1, ] <- c(rounds, 
+                    #browser()
+                    print(paste(rounds, depth, r_sample, c_sample, cv[[5]]))
+                    tbl_eval[nrow(tbl_eval)+1, ] <- c(rounds, 
                                                          depth, 
                                                          r_sample, 
                                                          c_sample, 
-                                                         min(as.matrix(cv)[,3]), 
-                                                         which.min(as.matrix(cv)[,3]))
+                                                         #min(as.matrix(cv[[3]])), 
+                                                         cv$best_iteration)
                     
                   }
                 }
@@ -182,6 +183,6 @@ setMethod("run", "ParamXGBoostSolver",
             
             #return(as.matrix(cv))
             #return(cv)
-            #return(tbl_logloss)
+            #return(tbl_eval)  
           })
 #----------------------------------------------------------------------------------------------------
