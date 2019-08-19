@@ -154,7 +154,7 @@ setMethod("run", "ParamXGBoostSolver",
                   
                   for (c_sample in c(0.4, 0.6, 0.8, 1)) {
                     
-                    
+                    set.seed(123)
                     eta_val <- 2 / rounds
                     cv <- xgb.cv(data = x, nfold = 3, label = y, 
                                     nrounds = rounds, 
@@ -164,11 +164,10 @@ setMethod("run", "ParamXGBoostSolver",
                                     colsample_bytree = c_sample,
                                     early_stopping_rounds = 0.5*rounds,
                                     eval_metric = 'logloss',
-                                    verbose = FALSE,
-                                    seed = 123)
-                    #print(as.matrix(cv))
-                    
-                    print(paste(rounds, depth, r_sample, c_sample, min(as.matrix(cv)[,3] )))
+                                    verbose = FALSE)
+                    print(as.matrix(cv))
+                    print(cv)
+                    print(paste(rounds, depth, r_sample, c_sample, min(as.matrix(cv)[,3])))
                     tbl_logloss[nrow(tbl_logloss)+1, ] <- c(rounds, 
                                                          depth, 
                                                          r_sample, 
