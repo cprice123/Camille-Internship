@@ -165,7 +165,6 @@ setMethod("run", "ParamXGBoostSolver",
                                     early_stopping_rounds = 0.5*rounds,
                                     #objective = regression_type,
                                     verbose = FALSE)
-                    #print(as.matrix(cv))
                     print(cv)
                     #browser()
                     print(paste(rounds, depth, r_sample, c_sample, cv[[5]]))
@@ -175,7 +174,7 @@ setMethod("run", "ParamXGBoostSolver",
                                                          c_sample, 
                                                          #min(as.matrix(cv[[cv$best_iteration, evals]])), 
                                                          cv$best_iteration)
-                    if (nrow(tbl_eval)) == 912 {
+                    if (nrow(tbl_eval) == 912) {
                       return(tbl_eval)
                       #and order etc
                     }else{
