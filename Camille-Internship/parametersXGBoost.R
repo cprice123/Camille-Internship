@@ -173,16 +173,17 @@ setMethod("run", "ParamXGBoostSolver",
                                                          depth, 
                                                          r_sample, 
                                                          c_sample, 
-                                                         #min(as.matrix(cv[[3]])), 
+                                                         #min(as.matrix(cv[[cv$best_iteration, evals]])), 
                                                          cv$best_iteration)
-                    
+                    if (nrow(tbl_eval)) == 912 {
+                      return(tbl_eval)
+                      #and order etc
+                    }else{
+                      
+                    }
                   }
                 }
               }
             }
-            
-            #return(as.matrix(cv))
-            #return(cv)
-            #return(tbl_eval)  
           })
 #----------------------------------------------------------------------------------------------------
