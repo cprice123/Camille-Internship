@@ -41,7 +41,7 @@ test_ampAD.mef2c.154tfs.278samples.ParamXGBoost <- function()
   tbl <- run(ParamXGBoost.solver)
   
   # Check for empirical values
-  checkTrue(nrow(subset(tbl_logloss, abs(rounds) < 101)) == 48)
+  checkTrue(nrow(subset(tbl_eval, abs(rounds) < 101)) == 48)
   
 } # test_ampAD.mef2c.154tfs.278samples.ParamXGBoost
 #----------------------------------------------------------------------------------------------------
