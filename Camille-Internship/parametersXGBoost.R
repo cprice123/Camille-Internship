@@ -143,10 +143,10 @@ setMethod("run", "ParamXGBoostSolver",
                                       "Depth" = numeric(),
                                       "r_sample" = numeric(),
                                       "c_sample" = numeric(),
-                                      #"Eval" = numeric(),
+                                      "Eval" = numeric(),
                                       "best_round" = numeric())
             
-            for (rounds in seq(100, 1000, 50)){
+            for (rounds in seq(100, 1000, 100)){
               
               for (depth in c(4, 6, 8, 10)) {
                 
@@ -155,8 +155,8 @@ setMethod("run", "ParamXGBoostSolver",
                   for (c_sample in c(0.4, 0.6, 0.8, 1)) {
                     
                     set.seed(123)
-                    eta_val <- 2 / rounds
-                    cv <- xgb.cv(data = x, nfold = 3, label = y, 
+                    eta_val <- 10 / rounds
+                    cv <- xgb.cv(data = x, nfold = 10, label = y, 
                                     nrounds = rounds, 
                                     eta = eta_val, 
                                     max_depth = depth,
@@ -165,20 +165,21 @@ setMethod("run", "ParamXGBoostSolver",
                                     early_stopping_rounds = 0.5*rounds,
                                     #objective = regression_type,
                                     verbose = FALSE)
-                    print(cv)
-                    #browser()
-                    print(paste(rounds, depth, r_sample, c_sample, cv[[5]]))
+                    print(cv)##??
+                    
+                    print(paste(rounds, depth, r_sample, c_sample, cv$best_iteration, cv$evaluation_log[cv$best_iteration,test_rmse_mean]))
                     tbl_eval[nrow(tbl_eval)+1, ] <- c(rounds, 
                                                          depth, 
                                                          r_sample, 
                                                          c_sample, 
-                                                         #min(as.matrix(cv[[cv$best_iteration, evals]])), 
+                                                         cv$evaluation_log[cv$best_iteration,test_rmse_mean], 
                                                          cv$best_iteration)
-                    if (nrow(tbl_eval) == 912) {
-                      return(tbl_eval)
-                      #and order etc
+                     if (nrow(tbl_eval) == 480) {#480
+                       tbl_eval_ordered <- tbl_eval[order(tbl_eval$Eval),]
+                       print(tbl_eval_ordered)
+                       print(tbl_eval_ordered[1,])
                     }else{
-                      
+                      #continues through loop
                     }
                   }
                 }
