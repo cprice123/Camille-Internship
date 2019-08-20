@@ -165,7 +165,7 @@ setMethod("run", "ParamXGBoostSolver",
                                     early_stopping_rounds = 0.5*rounds,
                                     #objective = regression_type,
                                     verbose = FALSE)
-                    print(cv)##??
+                    #print(cv)
                     
                     print(paste(rounds, depth, r_sample, c_sample, cv$best_iteration, cv$evaluation_log[cv$best_iteration,test_rmse_mean]))
                     tbl_eval[nrow(tbl_eval)+1, ] <- c(rounds, 
@@ -174,10 +174,15 @@ setMethod("run", "ParamXGBoostSolver",
                                                          c_sample, 
                                                          cv$evaluation_log[cv$best_iteration,test_rmse_mean], 
                                                          cv$best_iteration)
-                     if (nrow(tbl_eval) == 480) {#480
+                     if (nrow(tbl_eval) == 480) {
                        tbl_eval_ordered <- tbl_eval[order(tbl_eval$Eval),]
                        print(tbl_eval_ordered)
                        print(tbl_eval_ordered[1,])
+                       XGparams <- list(nrounds = tbl_eval_ordered[1,"Rounds"],
+                                      eta = 10/tbl_eval_ordered[1,"Rounds"],
+                                      max_depth = tbl_eval_ordered[1,"Depth"],
+                                      subsample = tbl_eval_ordered[1,"r_sample"],
+                                      colsample_bytree = tbl_eval_ordered[1,"c_sample"])
                     }else{
                       #continues through loop
                     }
