@@ -138,8 +138,11 @@ setMethod("run", "XGBoostSolver",
             x = t(mtx[tfs,,drop=FALSE])
             y = as.vector(t(mtx[target.gene,])) # Make target gene levels into a vector
             
-            # call XGBoost here
-            bst <- xgboost(data = x, label = y, eta = 0.1, nrounds = 100)
+            # get parameters
+            do.call(ParamXGBoostSolver, list(mtx,target.gene, tfs))
+            
+            #call XGBoost here
+            bst <- xgboost(data = x, label = y, XGparams)
             importance <- xgb.importance(feature_names = colnames(x), model = bst)
             plot.importance <- xgb.plot.importance(importance_matrix = importance)
             
@@ -148,5 +151,5 @@ setMethod("run", "XGBoostSolver",
                               importance[,-1])
             
             return(tbl)
-          })
+          }) 
 #----------------------------------------------------------------------------------------------------
