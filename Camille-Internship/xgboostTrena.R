@@ -139,17 +139,25 @@ setMethod("run", "XGBoostSolver",
             y = as.vector(t(mtx[target.gene,])) # Make target gene levels into a vector
             
             # get parameters
-            do.call(ParamXGBoostSolver, list(mtx,target.gene, tfs))
-            
+            #do.call(ParamXGBoostSolver, list(mtx,target.gene, tfs))
+            #rounds <- 400
+            #XGparams <- list(eta = ((-2/7000)*(rounds-100)) + 0.3, max_depth = 10, subsample = 0.5, colsample_bytree = 0.6)
             #call XGBoost here
-            bst <- xgboost(data = x, label = y, XGparams)
+            #params = XGparams
+            set.seed(123)
+            bst <- xgboost(data = x, label = y, nrounds = 200, eta = 0.1, subsample = 0.5)
             importance <- xgb.importance(feature_names = colnames(x), model = bst)
-            plot.importance <- xgb.plot.importance(importance_matrix = importance)
             
-            # Fashingf a dat.frame wtih the selected features with approrpiate scores
+            # data frame with importance values for potential regulators
             tbl <- data.frame(row.names = importance$Feature,
                               importance[,-1])
+            tbl.2 <- data.frame(subset(tbl, abs(Gain) >= (2/nrow(tbl))))
             
-            return(tbl)
+            #plot importance results
+            par(las=2,mar=c(5,4,2,1))
+            with(tbl.2, barplot(Gain, names.arg = rownames(tbl.2), 
+                                                 main = "Importance", xlab = "Potential Regulators",
+                                                 ylab = "Importance to Model"))
+            return(tbl.2)
           }) 
 #----------------------------------------------------------------------------------------------------
