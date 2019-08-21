@@ -146,16 +146,16 @@ setMethod("run", "ParamXGBoostSolver",
                                       "Eval" = numeric(),
                                       "best_round" = numeric())
             
-            for (rounds in seq(100, 1000, 100)){
+            for (rounds in seq(100, 800, 100)){
               
-              for (depth in c(4, 6, 8, 10)) {
+              for (depth in c(5, 10)) {
                 
-                for (r_sample in c(0.5, 0.75, 1)) {
+                for (r_sample in c(0.5, 1)) {
                   
-                  for (c_sample in c(0.4, 0.6, 0.8, 1)) {
+                  for (c_sample in c(0.4, 1)) {
                     
                     set.seed(123)
-                    eta_val <- 10 / rounds
+                    eta_val <- ((-2/7000)*(rounds-100)) + 0.3
                     cv <- xgb.cv(data = x, nfold = 10, label = y, 
                                     nrounds = rounds, 
                                     eta = eta_val, 
@@ -165,7 +165,6 @@ setMethod("run", "ParamXGBoostSolver",
                                     early_stopping_rounds = 0.5*rounds,
                                     #objective = regression_type,
                                     verbose = FALSE)
-                    #print(cv)
                     
                     print(paste(rounds, depth, r_sample, c_sample, cv$best_iteration, cv$evaluation_log[cv$best_iteration,test_rmse_mean]))
                     tbl_eval[nrow(tbl_eval)+1, ] <- c(rounds, 
@@ -174,12 +173,14 @@ setMethod("run", "ParamXGBoostSolver",
                                                          c_sample, 
                                                          cv$evaluation_log[cv$best_iteration,test_rmse_mean], 
                                                          cv$best_iteration)
-                     if (nrow(tbl_eval) == 480) {
+                     if (nrow(tbl_eval) == 64) {
                        tbl_eval_ordered <- tbl_eval[order(tbl_eval$Eval),]
                        print(tbl_eval_ordered)
                        print(tbl_eval_ordered[1,])
-                       XGparams <- list(nrounds = tbl_eval_ordered[1,"Rounds"],
-                                      eta = 10/tbl_eval_ordered[1,"Rounds"],
+                       
+                       #parameters to be used by XGBoostSolver
+                       rounds <- tbl_eval_ordered[1,"Rounds"]
+                       XGparams <- list(eta = ((-2/7000)*(rounds-100)) + 0.3,
                                       max_depth = tbl_eval_ordered[1,"Depth"],
                                       subsample = tbl_eval_ordered[1,"r_sample"],
                                       colsample_bytree = tbl_eval_ordered[1,"c_sample"])
