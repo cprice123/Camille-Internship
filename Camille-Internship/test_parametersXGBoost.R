@@ -6,28 +6,28 @@ printf <- function(...) print(noquote(sprintf(...)))
 #----------------------------------------------------------------------------------------------------
 runTests <- function()
 {
-  test_ParamXGBoostSolverConstructor()
-  test_ampAD.mef2c.154tfs.278samples.ParamXGBoost()
+  test_ParameterizeXGBoostSolverConstructor()
+  test_ampAD.mef2c.154tfs.278samples.ParameterizeXGBoost()
   
 } # runTests
 #----------------------------------------------------------------------------------------------------
-test_ParamXGBoostSolverConstructor <- function()
+test_ParameterizeXGBoostSolverConstructor <- function()
 {
-  printf("--- test_ParamXGBoostSolverConstructor")
+  printf("--- test_ParameterizeXGBoostSolverConstructor")
   
   mtx <- matrix(1:9,nrow=3)
   rownames(mtx) <- c("gene1","gene2","gene3")
-  solver <- ParamXGBoostSolver(mtx,targetGene = "gene1",
+  solver <- ParameterizeXGBoostSolver(mtx,targetGene = "gene1",
                           candidateRegulators = c("gene2","gene3"))
   
-  checkEquals(class(solver)[1], "ParamXGBoostSolver")
-  checkTrue(all(c("ParamXGBoostSolver", "Solver") %in% is(solver)))
+  checkEquals(class(solver)[1], "ParameterizeXGBoostSolver")
+  checkTrue(all(c("ParameterizeXGBoostSolver", "Solver") %in% is(solver)))
   
-} # test_ParamXGBoostSolverConstructor
+} # test_ParameterizeXGBoostSolverConstructor
 #----------------------------------------------------------------------------------------------------
-test_ampAD.mef2c.154tfs.278samples.ParamXGBoost <- function()
+test_ampAD.mef2c.154tfs.278samples.ParameterizeXGBoost <- function()
 {
-  printf("--- test_ampAD.mef2c.154tfs.278samples.ParamXGBoost")
+  printf("--- test_ampAD.mef2c.154tfs.278samples.ParameterizeXGBoost")
   
   # Load matrix and transform via arcsinh
   load(system.file(package="trena", "extdata/ampAD.154genes.mef2cTFs.278samples.RData"))
@@ -37,12 +37,12 @@ test_ampAD.mef2c.154tfs.278samples.ParamXGBoost <- function()
   tfs <- setdiff(rownames(mtx.asinh), "MEF2C")
   #print(fivenum(mtx.asinh)  # [1] 0.000000 1.327453 3.208193 4.460219 7.628290)
   
-  ParamXGBoost.solver <- ParamXGBoostSolver(mtx.asinh, target.gene, tfs)
-  tbl <- run(ParamXGBoost.solver)
+  ParameterizeXGBoost.solver <- ParameterizeXGBoostSolver(mtx.asinh, target.gene, tfs)
+  tbl <- run(ParameterizeXGBoost.solver)
   
   # Check for empirical values
-  checkTrue(nrow(subset(tbl_eval, abs(rounds) < 101)) == 48)
+  checkTrue(nrow(subset(tbl_eval, abs(rounds) < 101)) == 8)
   
-} # test_ampAD.mef2c.154tfs.278samples.ParamXGBoost
+} # test_ampAD.mef2c.154tfs.278samples.ParameterizeXGBoost
 #----------------------------------------------------------------------------------------------------
 if(!interactive()) runTests()
