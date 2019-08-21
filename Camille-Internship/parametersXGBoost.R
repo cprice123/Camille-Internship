@@ -5,10 +5,10 @@
 #' @include Solver.R
 #' @import methods
 #'
-#' @name ParamXGBoostSolver-class
+#' @name ParameterizeXGBoostSolver-class
 #'
 
-.ParamXGBoostSolver <- setClass("ParamXGBoostSolver", contains = "Solver")
+.ParameterizeXGBoostSolver <- setClass("ParameterizeXGBoostSolver", contains = "Solver")
 #----------------------------------------------------------------------------------------------------
 #' Create a Solver class using gradient boosting (a regression technique) and the XGBoost library
 #'
@@ -30,9 +30,9 @@
 #' load(system.file(package="trena", "extdata/ampAD.154genes.mef2cTFs.278samples.RData"))
 #' target.gene <- "MEF2C"
 #' tfs <- setdiff(rownames(mtx.sub), target.gene)
-#' ParamXGBoost.solver <- ParamXGBoostSolver(mtx.sub, target.gene, tfs)
+#' ParameterizeXGBoost.solver <- ParameterizeXGBoostSolver(mtx.sub, target.gene, tfs)
 
-ParamXGBoostSolver <- function(mtx.assay = matrix(), targetGene, candidateRegulators, quiet=TRUE)
+ParameterizeXGBoostSolver <- function(mtx.assay = matrix(), targetGene, candidateRegulators, quiet=TRUE)
 {
   # Remove the targetGene from candidateRegulators
   if(any(grepl(targetGene, candidateRegulators)))
@@ -42,7 +42,7 @@ ParamXGBoostSolver <- function(mtx.assay = matrix(), targetGene, candidateRegula
   candidateRegulators <- intersect(candidateRegulators, rownames(mtx.assay))
   stopifnot(length(candidateRegulators) > 0)
   
-  obj <- .ParamXGBoostSolver(Solver(mtx.assay=mtx.assay,
+  obj <- .ParameterizeXGBoostSolver(Solver(mtx.assay=mtx.assay,
                                quiet=quiet,
                                targetGene=targetGene,
                                candidateRegulators=candidateRegulators))
@@ -53,14 +53,14 @@ ParamXGBoostSolver <- function(mtx.assay = matrix(), targetGene, candidateRegula
   
   obj
   
-} #ParamXGBoostSolver, the constructor
+} #ParameterizeXGBoostSolver, the constructor
 #----------------------------------------------------------------------------------------------------
-#' Show the ParamXGBoost Solver
+#' Show the ParameterizeXGBoost Solver
 #'
-#' @rdname show.ParamXGBoostSolver
-#' @aliases show.ParamXGBoostSolver
+#' @rdname show.ParameterizeXGBoostSolver
+#' @aliases show.ParameterizeXGBoostSolver
 #'
-#' @param object An object of the class ParamXGBoostSolver
+#' @param object An object of the class ParameterizeXGBoostSolver
 #'
 #' @return A truncated view of the supplied object
 #'
@@ -68,10 +68,10 @@ ParamXGBoostSolver <- function(mtx.assay = matrix(), targetGene, candidateRegula
 #' load(system.file(package="trena", "extdata/ampAD.154genes.mef2cTFs.278samples.RData"))
 #' target.gene <- "MEF2C"
 #' tfs <- setdiff(rownames(mtx.sub), target.gene)
-#' ParamXGBoost.solver <- ParamXGBoostSolver(mtx.sub, target.gene, tfs)
-#' show(ParamXGBoost.solver)
+#' ParameterizeXGBoost.solver <- ParameterizeXGBoostSolver(mtx.sub, target.gene, tfs)
+#' show(ParameterizeXGBoost.solver)
 
-setMethod('show', 'ParamXGBoostSolver',
+setMethod('show', 'ParameterizeXGBoostSolver',
           
           function(object) {
             regulator.count <- length(getRegulators(object))
@@ -82,16 +82,16 @@ setMethod('show', 'ParamXGBoostSolver',
             else
               regulatorString <- paste(getRegulators(object), collapse=",")
             
-            msg = sprintf("ParamXGBoostSolver with mtx.assay (%d, %d), targetGene %s, %d candidate regulators %s",
+            msg = sprintf("ParameterizeXGBoostSolver with mtx.assay (%d, %d), targetGene %s, %d candidate regulators %s",
                           nrow(getAssayData(object)), ncol(getAssayData(object)),
                           getTarget(object), regulator.count, regulatorString)
             cat (msg, '\n', sep='')
           })
 #----------------------------------------------------------------------------------------------------
-#' Run the ParamXGBoost Solver
+#' Run the ParameterizeXGBoost Solver
 #'
-#' @rdname solve.ParamXGBoost
-#' @aliases run.ParamXGBoostSolver solve.ParamXGBoost
+#' @rdname solve.ParameterizeXGBoost
+#' @aliases run.ParameterizeXGBoostSolver solve.ParameterizeXGBoost
 #'
 #' @description Given a TReNA object with XGBoost as the solver, use the \code{\link{cor}}
 #' function with \code{method = "XGBoost"} to find parameters for XGBoostSolver.
@@ -109,10 +109,10 @@ setMethod('show', 'ParamXGBoostSolver',
 #' load(system.file(package="trena", "extdata/ampAD.154genes.mef2cTFs.278samples.RData"))
 #' target.gene <- "MEF2C"
 #' tfs <- setdiff(rownames(mtx.sub), target.gene)
-#' ParamXGBoost.solver <- ParamXGBoostSolver(mtx.sub, target.gene, tfs)
-#' tbl <- run(ParamXGBoost.solver)
+#' ParameterizeXGBoost.solver <- ParameterizeXGBoostSolver(mtx.sub, target.gene, tfs)
+#' tbl <- run(ParameterizeXGBoost.solver)
 
-setMethod("run", "ParamXGBoostSolver",
+setMethod("run", "ParameterizeXGBoostSolver",
           
           function (obj){
             
@@ -138,7 +138,7 @@ setMethod("run", "ParamXGBoostSolver",
             x = t(mtx[tfs,,drop=FALSE])
             y = as.vector(t(mtx[target.gene,])) # Make target gene levels into a vector
             
-            #ParamXGBoostSolver
+            #ParameterizeXGBoostSolver
             tbl_eval <- data.frame("Rounds" = numeric(),
                                       "Depth" = numeric(),
                                       "r_sample" = numeric(),
