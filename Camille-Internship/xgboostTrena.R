@@ -158,6 +158,6 @@ setMethod("run", "XGBoostSolver",
             with(tbl.2, barplot(Gain, names.arg = rownames(tbl.2), 
                                                  main = "Importance", xlab = "Potential Regulators",
                                                  ylab = "Importance to Model"))
-            return(tbl.2)
+            return(tbl)
           }) 
 #----------------------------------------------------------------------------------------------------
