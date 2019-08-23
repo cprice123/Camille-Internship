@@ -85,4 +85,6 @@ tbl.extended <- merge(tbl.extended, tbl.importance.4[, 1:2], by.x="gene", by.y="
 colnames(tbl.extended)[ncol(tbl.extended)] <- "boost.iter.200.eta0.1sub0.1"
 
 
+lapply(2:7, function(i) unlist(lapply(8:11, function(j) cor(tbl.extended[,i], tbl.extended[,j], method="spearman"))))
 
+lapply(2:7, function(i) unlist(lapply(8:11, function(j) cor(tbl.extended[,i], tbl.extended[,j], method="pearson"))))
